@@ -373,6 +373,19 @@ vmod_gauge( struct sess *sp, struct vmod_priv *priv, const char *key, int num ) 
     _send_to_statsd( priv, key, val );
 }
 
+void
+vmod_set( struct sess *sp, struct vmod_priv *priv, const char *key, const char *payload ) {
+    _DEBUG && fprintf( stderr, "vmod-statsd: set: %s = %s\n", key, payload );
+
+    // Get the buffer ready. Length of key + payload, +5 for metadata
+    char val[ strlen(key) + strlen(payload) + 5];
+
+    // looks like: gaugor:tktk|s
+    snprintf( val, sizeof(val), ":%s|s", payload );
+
+    _send_to_statsd( priv, key, val );
+}
+
 
 // const char *
 // vmod_hello(struct sess *sp, const char *name)
